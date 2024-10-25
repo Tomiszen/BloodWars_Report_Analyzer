@@ -11,6 +11,13 @@ col1, col2 = st.columns(2)
 col1.multiselect("Litera", ["a", "b", "c"], ["a", "c"])
 col2.selectbox("Cyfra", ("1", "2", "3"))
 
+st.write(":yellow_heart:")
+st.write(":green_heart:")
+st.write(":heart:")
+st.write(":black_heart:")
+st.write(":skull_and_crossbones:")
+st.write(":star:")
+
 link = st.text_input(label=":link do raportu: link")
 
 st.write(link)

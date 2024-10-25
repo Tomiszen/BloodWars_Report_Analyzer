@@ -5,15 +5,23 @@ class Report:
         self.report_type = report_type
         self.attacker = None
         self.defender = None
+        self.winner = None
 
     def __str__(self):
         return self.report_type + ": " + self.attacker + " vs " + self.defender
 
-    def set_attacker(self, attacker):
-        self.attacker = attacker
+    def set_opponents(self, sides):
+        self.attacker = sides['attacker'].strip()
+        self.defender = sides['defender'].strip()
 
-    def set_defender(self, defender):
-        self.defender = defender
+    def set_winner(self, winner):
+        self.winner = winner.strip()
+
+    def check_attacker_won(self):
+        return True if (self.winner == self.attacker) else False
+
+    def check_defender_won(self):
+        return True if (self.winner == self.defender) else False
 
 
 class Player:
@@ -25,6 +33,9 @@ class Player:
         self.id = player_id
         self.name = name.replace("(@)", "").replace("(*)", "").strip()
         self.clan = clan
+        self.race = None
+        self.level = None
+        self.parameters = {}
         type(self).players_list.append(self)
 
     def __str__(self):
@@ -45,3 +56,16 @@ class Player:
     @classmethod
     def get_clan_players(cls, clan):
         return list(filter(lambda elem: elem.clan == clan, cls.players_list))
+
+    @classmethod
+    def get_players_names(cls):
+        return [player.name for player in cls.players_list]
+
+    def set_race(self, race):
+        self.race = race
+
+    def set_level(self, level):
+        self.level = int(level)
+
+    def set_parameter(self, parameter, value):
+        self.parameters.update({parameter: int(value)})
