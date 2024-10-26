@@ -60,6 +60,7 @@ def read_player_name(player):
 def read_info_from_onmouseover(player_soup, player_object):
     onmouseover_soup = get_player_onmouseover(player_soup)
     read_player_basic_info(onmouseover_soup, player_object)
+    read_parameters_and_disposable_item(onmouseover_soup, player_object)
 
 
 def get_player_onmouseover(player):
@@ -79,9 +80,14 @@ def read_player_basic_info(soup, player_object):
     player_object.set_parameter("initiative", params[7].text)
 
 
-def read_basic_statistics(soup):
-    stats_spans = soup.find_all('span')
-    stats = [stat.text for stat in stats_spans[1:]]
-    return stats, stats_spans
+def read_parameters_and_disposable_item(soup, player_object):
+    parameters_spans = soup.find_all('span')
+    parameters = [param.text for param in parameters_spans[1:10]]
+    parameters_names = ['strength', 'agility', 'toughness', 'appearance', 'charisma', 'reputation',
+                        'perception', 'intelligence', 'knowledge']
+    for i in range(len(parameters)):
+        player_object.set_parameter(parameters_names[i], parameters[i])
+    if len(parameters_spans) == 11:
+        player_object.set_disposable_item(parameters_spans[10])
 
 

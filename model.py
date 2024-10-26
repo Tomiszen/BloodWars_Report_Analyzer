@@ -36,6 +36,7 @@ class Player:
         self.race = None
         self.level = None
         self.parameters = {}
+        self.disposable_item = None
         type(self).players_list.append(self)
 
     def __str__(self):
@@ -69,3 +70,6 @@ class Player:
 
     def set_parameter(self, parameter, value):
         self.parameters.update({parameter: int(value)})
+
+    def set_disposable_item(self, item):
+        self.disposable_item = item
