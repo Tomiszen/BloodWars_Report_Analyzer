@@ -47,6 +47,6 @@ elif 'player' in st.session_state:
     st.write(Player.get_player(name=selected_player).disposable_item)
     st.write(Player.get_player(name=selected_player).arcana)
     st.write(Player.get_player(name=selected_player).evolutions)
-
+    st.write(Player.get_player(name=selected_player).talismans)
 
 
