@@ -44,6 +44,8 @@ elif 'player' in st.session_state:
     selected_player = st.selectbox("Gracz", Player.get_players_names())
     st.write(Player.get_player(name=selected_player).name)
     st.write(Player.get_player(name=selected_player).parameters)
+    st.write(Player.get_player(name=selected_player).disposable_item)
+    st.write(Player.get_player(name=selected_player).arcana)
 
 
 

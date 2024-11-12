@@ -61,6 +61,7 @@ def read_info_from_onmouseover(player_soup, player_object):
     onmouseover_soup = get_player_onmouseover(player_soup)
     read_player_basic_info(onmouseover_soup, player_object)
     read_parameters_and_disposable_item(onmouseover_soup, player_object)
+    read_arcana(onmouseover_soup, player_object)
 
 
 def get_player_onmouseover(player):
@@ -87,7 +88,26 @@ def read_parameters_and_disposable_item(soup, player_object):
                         'perception', 'intelligence', 'knowledge']
     for i in range(len(parameters)):
         player_object.set_parameter(parameters_names[i], parameters[i])
-    if len(parameters_spans) == 11:
-        player_object.set_disposable_item(parameters_spans[10])
+    if len(parameters_spans) >= 11:
+        player_object.set_disposable_item(parameters_spans[10].text if parameters_spans[10].has_attr("class") else None)
 
+
+def basic_read(soup, tag_filter, text_start, text_end=None):
+    div = soup.find('div')
+    reading = div.find(tag_filter)
+    if text_end:
+        return reading.text[text_start:text_end].split(", ") if reading else []
+    else:
+        return reading.text[text_start:].split(", ") if reading else []
+
+
+def read_arcana(soup, player_object):
+    arcana = basic_read(soup, arcana_div, 16, -1)
+    print(arcana)
+    print({item.split(' poz. ')[0]: item.split(' poz. ')[1] for item in arcana})
+    player_object.set_arcana({item.split(' poz. ')[0]: int(item.split(' poz. ')[1]) for item in arcana})
+
+
+def arcana_div(tag):
+    return tag.name == 'div' and 'arkana' in tag.get_text()
 

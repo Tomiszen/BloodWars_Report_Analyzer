@@ -37,6 +37,7 @@ class Player:
         self.level = None
         self.parameters = {}
         self.disposable_item = None
+        self.arcana = {}
         type(self).players_list.append(self)
 
     def __str__(self):
@@ -60,7 +61,9 @@ class Player:
 
     @classmethod
     def get_players_names(cls):
-        return [player.name for player in cls.players_list]
+        players_names_list = [player.name for player in cls.players_list]
+        players_names_list.sort()
+        return players_names_list
 
     def set_race(self, race):
         self.race = race
@@ -73,3 +76,6 @@ class Player:
 
     def set_disposable_item(self, item):
         self.disposable_item = item
+
+    def set_arcana(self, arcana):
+        self.arcana.update(arcana)
