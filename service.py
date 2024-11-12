@@ -108,7 +108,7 @@ def basic_read(soup, tag_filter, text_start, text_end=None):
 
 def read_arcana(soup, player_object):
     arcana = basic_read(soup, arcana_div, 16, -1)
-    player_object.set_arcana({item.split(' poz. ')[0]: int(item.split(' poz. ')[1]) for item in arcana})
+    player_object.set_arcana(list_to_dictionary(arcana))
 
 
 def arcana_div(tag):
