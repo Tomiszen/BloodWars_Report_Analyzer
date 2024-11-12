@@ -38,6 +38,7 @@ class Player:
         self.parameters = {}
         self.disposable_item = None
         self.arcana = {}
+        self.evolutions = {}
         type(self).players_list.append(self)
 
     def __str__(self):
@@ -79,3 +80,6 @@ class Player:
 
     def set_arcana(self, arcana):
         self.arcana.update(arcana)
+
+    def set_evolutions(self, evolutions):
+        self.evolutions.update(evolutions)

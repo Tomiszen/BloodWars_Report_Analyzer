@@ -4,6 +4,10 @@ from bs4 import BeautifulSoup
 import re
 
 
+def list_to_dictionary(list_to_convert):
+    return {item.split(' poz. ')[0]: int(item.split(' poz. ')[1]) for item in list_to_convert}
+
+
 def create_report_object(url, report_type):
     return model.Report(url, "Arena klanowa")
 
@@ -62,6 +66,7 @@ def read_info_from_onmouseover(player_soup, player_object):
     read_player_basic_info(onmouseover_soup, player_object)
     read_parameters_and_disposable_item(onmouseover_soup, player_object)
     read_arcana(onmouseover_soup, player_object)
+    read_evolutions(onmouseover_soup, player_object)
 
 
 def get_player_onmouseover(player):
@@ -103,11 +108,19 @@ def basic_read(soup, tag_filter, text_start, text_end=None):
 
 def read_arcana(soup, player_object):
     arcana = basic_read(soup, arcana_div, 16, -1)
-    print(arcana)
-    print({item.split(' poz. ')[0]: item.split(' poz. ')[1] for item in arcana})
     player_object.set_arcana({item.split(' poz. ')[0]: int(item.split(' poz. ')[1]) for item in arcana})
 
 
 def arcana_div(tag):
     return tag.name == 'div' and 'arkana' in tag.get_text()
+
+
+def read_evolutions(soup, player_object):
+    evolutions = basic_read(soup, evolutions_div, 18, -1)
+    player_object.set_evolutions(list_to_dictionary(evolutions))
+
+
+def evolutions_div(tag):
+    return tag.name == 'div' and 'ewolucje' in tag.get_text()
+
 
