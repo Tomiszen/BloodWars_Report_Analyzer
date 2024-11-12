@@ -32,6 +32,8 @@ class Player:
     def __init__(self, player_id, name, clan):
         self.id = player_id
         self.name = name.replace("(@)", "").replace("(*)", "").strip()
+        self.leader = True if "(@)" in name else False
+        self.initiator = True if "(*)" in name else False
         self.clan = clan
         self.race = None
         self.level = None
