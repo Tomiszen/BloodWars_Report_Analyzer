@@ -68,6 +68,7 @@ def read_info_from_onmouseover(player_soup, player_object):
     read_arcana(onmouseover_soup, player_object)
     read_evolutions(onmouseover_soup, player_object)
     read_talismans(onmouseover_soup, player_object)
+    read_tactic(onmouseover_soup, player_object)
 
 
 def get_player_onmouseover(player):
@@ -132,3 +133,12 @@ def read_talismans(soup, player_object):
 
 def talismans_div(tag):
     return tag.name == 'div' and 'Talizmany' in tag.get_text()
+
+
+def read_tactic(soup, player_object):
+    tactic = basic_read(soup, tactic_div, 22)
+    player_object.set_tactic(tactic if tactic else None)
+
+
+def tactic_div(tag):
+    return tag.name == 'div' and 'Taktyka' in tag.get_text()
