@@ -10,6 +10,7 @@ import views
 import plotly.express as px
 import plotly.graph_objects as go
 
+st.html(''' <style> hr { border-color: orange; } </style> ''')
 
 st.title("Analizator aren klanowych BloodWars")
 st.subheader("Made by Tomisz")
@@ -35,19 +36,15 @@ if btn and 'player' not in st.session_state:
         st.error("Błędny link do raportu")
 
     views.display_clans(Player, report)
+    st.divider()
     selected_player = st.selectbox("Gracz", Player.get_players_names())
 
 elif 'player' in st.session_state:
     Player = st.session_state['player']
     report = st.session_state['report']
     views.display_clans(Player, report)
-    selected_player = st.selectbox("Gracz", Player.get_players_names())
-    st.write(Player.get_player(name=selected_player).name)
-    st.write(Player.get_player(name=selected_player).parameters)
-    st.write(Player.get_player(name=selected_player).disposable_item)
-    st.write(Player.get_player(name=selected_player).arcana)
-    st.write(Player.get_player(name=selected_player).evolutions)
-    st.write(Player.get_player(name=selected_player).talismans)
-    st.write(Player.get_player(name=selected_player).tactic)
-    st.write(Player.get_player(name=selected_player).time_bonuses)
+    st.divider()
+    selected_name = st.selectbox("Gracz", Player.get_players_names())
+    views.display_player(Player.get_player(name=selected_name))
+
 
