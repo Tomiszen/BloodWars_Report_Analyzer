@@ -43,6 +43,7 @@ class Player:
         self.evolutions = {}
         self.talismans = {}
         self.tactic = None
+        self.time_bonuses = {}
         type(self).players_list.append(self)
 
     def __str__(self):
@@ -92,4 +93,9 @@ class Player:
         self.talismans.update(talismans)
 
     def set_tactic(self, tactic):
-        self.tactic=tactic
+        self.tactic = tactic
+
+    def set_time_bonuses(self, time_bonuses):
+        self.time_bonuses.update(time_bonuses)
+
+

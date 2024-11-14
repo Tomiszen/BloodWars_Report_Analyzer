@@ -4,8 +4,9 @@ from bs4 import BeautifulSoup
 import re
 
 
-def list_to_dictionary(list_to_convert):
-    return {item.split(' poz. ')[0]: int(item.split(' poz. ')[1]) for item in list_to_convert}
+def list_to_dict(list_to_convert, split_string=' poz. '):
+    return {item.split(split_string)[0]: int(item.split(split_string)[1])
+            for item in list_to_convert if split_string in item}
 
 
 def create_report_object(url, report_type):
@@ -69,6 +70,7 @@ def read_info_from_onmouseover(player_soup, player_object):
     read_evolutions(onmouseover_soup, player_object)
     read_talismans(onmouseover_soup, player_object)
     read_tactic(onmouseover_soup, player_object)
+    read_time_bonuses(onmouseover_soup, player_object)
 
 
 def get_player_onmouseover(player):
@@ -110,7 +112,7 @@ def basic_read(soup, tag_filter, text_start, text_end=None):
 
 def read_arcana(soup, player_object):
     arcana = basic_read(soup, arcana_div, 16, -1)
-    player_object.set_arcana(list_to_dictionary(arcana))
+    player_object.set_arcana(list_to_dict(arcana))
 
 
 def arcana_div(tag):
@@ -119,7 +121,7 @@ def arcana_div(tag):
 
 def read_evolutions(soup, player_object):
     evolutions = basic_read(soup, evolutions_div, 18, -1)
-    player_object.set_evolutions(list_to_dictionary(evolutions))
+    player_object.set_evolutions(list_to_dict(evolutions))
 
 
 def evolutions_div(tag):
@@ -128,7 +130,7 @@ def evolutions_div(tag):
 
 def read_talismans(soup, player_object):
     talismans = basic_read(soup, talismans_div, 11)
-    player_object.set_talismans(list_to_dictionary(talismans))
+    player_object.set_talismans(list_to_dict(talismans))
 
 
 def talismans_div(tag):
@@ -142,3 +144,12 @@ def read_tactic(soup, player_object):
 
 def tactic_div(tag):
     return tag.name == 'div' and 'Taktyka' in tag.get_text()
+
+
+def read_time_bonuses(soup, player_object):
+    time_bonuses = basic_read(soup, time_bonuses_div, 16)
+    player_object.set_time_bonuses(list_to_dict(time_bonuses, split_string=' poziom '))
+
+
+def time_bonuses_div(tag):
+    return tag.name == 'div' and 'czasowe' in tag.get_text()
