@@ -62,15 +62,23 @@ def read_player_name(player):
     return player.text.strip()
 
 
-def read_info_from_onmouseover(player_soup, player_object):
+def read_info_from_onmouseover(player_soup, player):
     onmouseover_soup = get_player_onmouseover(player_soup)
-    read_player_basic_info(onmouseover_soup, player_object)
-    read_parameters_and_disposable_item(onmouseover_soup, player_object)
-    read_arcana(onmouseover_soup, player_object)
-    read_evolutions(onmouseover_soup, player_object)
-    read_talismans(onmouseover_soup, player_object)
-    read_tactic(onmouseover_soup, player_object)
-    read_time_bonuses(onmouseover_soup, player_object)
+
+    race, level, parameters = read_player_basic_info(onmouseover_soup)
+    player.set_race(race)
+    player.set_level(level)
+    player.set_parameters(parameters)
+
+    parameters, disposable_item = read_parameters_and_disposable_item(onmouseover_soup)
+    player.set_parameters(parameters)
+    player.set_disposable_item(disposable_item)
+
+    player.set_arcana(read_arcana(onmouseover_soup))
+    player.set_evolutions(read_evolutions(onmouseover_soup))
+    player.set_talismans(read_talismans(onmouseover_soup))
+    player.set_tactic(read_tactic(onmouseover_soup))
+    player.set_time_bonuses(read_time_bonuses(onmouseover_soup))
 
 
 def get_player_onmouseover(player):
@@ -79,26 +87,30 @@ def get_player_onmouseover(player):
     return onmouseover_soup
 
 
-def read_player_basic_info(soup, player_object):
+def read_player_basic_info(soup):
     params = soup.find_all('div')[2].find_all('b')
-    player_object.set_race(params[0].text)
-    player_object.set_level(params[2].text)
-    player_object.set_parameter("defense", params[3].text)
-    player_object.set_parameter("hp", params[4].text.split()[0])
-    player_object.set_parameter("blood_points", params[5].text.split()[0])
-    player_object.set_parameter("luck", params[6].text)
-    player_object.set_parameter("initiative", params[7].text)
+    race = params[0].text
+    level = params[2].text
+    parameters = {"defence": params[3].text}
+    parameters.update({"hp": params[4].text.split()[0]})
+    parameters.update({"blood_points": params[5].text.split()[0]})
+    parameters.update({"luck": params[6].text})
+    parameters.update({"initiative": params[7].text})
+    return race, level, parameters
 
 
-def read_parameters_and_disposable_item(soup, player_object):
+def read_parameters_and_disposable_item(soup):
     parameters_spans = soup.find_all('span')
     parameters = [param.text for param in parameters_spans[1:10]]
     parameters_names = ['strength', 'agility', 'toughness', 'appearance', 'charisma', 'reputation',
                         'perception', 'intelligence', 'knowledge']
+    parameters_dict = {}
     for i in range(len(parameters)):
-        player_object.set_parameter(parameters_names[i], parameters[i])
+        parameters_dict.update({parameters_names[i]: parameters[i]})
+    disposable_item = None
     if len(parameters_spans) >= 11:
-        player_object.set_disposable_item(parameters_spans[10].text if parameters_spans[10].has_attr("class") else None)
+        disposable_item = parameters_spans[10].text if parameters_spans[10].has_attr("class") else None
+    return parameters_dict, disposable_item
 
 
 def basic_read(soup, tag_filter, text_start, text_end=None):
@@ -110,45 +122,45 @@ def basic_read(soup, tag_filter, text_start, text_end=None):
         return reading.text[text_start:].split(", ") if reading else []
 
 
-def read_arcana(soup, player_object):
+def read_arcana(soup):
     arcana = basic_read(soup, arcana_div, 16, -1)
-    player_object.set_arcana(list_to_dict(arcana))
+    return list_to_dict(arcana)
 
 
 def arcana_div(tag):
     return tag.name == 'div' and 'arkana' in tag.get_text()
 
 
-def read_evolutions(soup, player_object):
+def read_evolutions(soup):
     evolutions = basic_read(soup, evolutions_div, 18, -1)
-    player_object.set_evolutions(list_to_dict(evolutions))
+    return list_to_dict(evolutions)
 
 
 def evolutions_div(tag):
     return tag.name == 'div' and 'ewolucje' in tag.get_text()
 
 
-def read_talismans(soup, player_object):
+def read_talismans(soup):
     talismans = basic_read(soup, talismans_div, 11)
-    player_object.set_talismans(list_to_dict(talismans))
+    return list_to_dict(talismans)
 
 
 def talismans_div(tag):
     return tag.name == 'div' and 'Talizmany' in tag.get_text()
 
 
-def read_tactic(soup, player_object):
+def read_tactic(soup):
     tactic = basic_read(soup, tactic_div, 22)
-    player_object.set_tactic(tactic if tactic else None)
+    return tactic[0] if tactic else None
 
 
 def tactic_div(tag):
     return tag.name == 'div' and 'Taktyka' in tag.get_text()
 
 
-def read_time_bonuses(soup, player_object):
+def read_time_bonuses(soup):
     time_bonuses = basic_read(soup, time_bonuses_div, 16)
-    player_object.set_time_bonuses(list_to_dict(time_bonuses, split_string=' poziom '))
+    return list_to_dict(time_bonuses, split_string=' poziom ')
 
 
 def time_bonuses_div(tag):

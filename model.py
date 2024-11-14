@@ -80,6 +80,10 @@ class Player:
     def set_parameter(self, parameter, value):
         self.parameters.update({parameter: int(value)})
 
+    def set_parameters(self, parameters):
+        for key, value in parameters.items():
+            self.parameters.update({key: int(value)})
+
     def set_disposable_item(self, item):
         self.disposable_item = item
 
