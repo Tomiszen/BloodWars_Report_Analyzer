@@ -19,6 +19,7 @@ link = st.text_input(label=":link: link do raportu", value="https://r1.bloodwars
 btn = st.button("Analizuj", type="primary")
 st.markdown(st.session_state)
 if btn and 'player' not in st.session_state:
+    print('test')
     report = service.create_report_object(link, 'Arena klanowa')
     soup = service.make_soup(report)
     if soup:
@@ -38,6 +39,7 @@ if btn and 'player' not in st.session_state:
     views.display_clans(Player, report)
     st.divider()
     selected_player = st.selectbox("Gracz", Player.get_players_names())
+    views.display_top_players(Player)
 
 elif 'player' in st.session_state:
     Player = st.session_state['player']
@@ -46,5 +48,5 @@ elif 'player' in st.session_state:
     st.divider()
     selected_name = st.selectbox("Gracz", Player.get_players_names())
     views.display_player(Player.get_player(name=selected_name))
-
+    views.display_top_players(Player)
 

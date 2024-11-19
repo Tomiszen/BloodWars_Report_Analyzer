@@ -69,11 +69,9 @@ def read_info_from_onmouseover(player_soup, player):
     player.set_race(race)
     player.set_level(level)
     player.set_parameters(parameters)
-
     parameters, disposable_item = read_parameters_and_disposable_item(onmouseover_soup)
     player.set_parameters(parameters)
     player.set_disposable_item(disposable_item)
-
     player.set_arcana(read_arcana(onmouseover_soup))
     player.set_evolutions(read_evolutions(onmouseover_soup))
     player.set_talismans(read_talismans(onmouseover_soup))
