@@ -2,11 +2,7 @@ import model
 import requests
 from bs4 import BeautifulSoup
 import re
-
-
-def list_to_dict(list_to_convert, split_string=' poz. '):
-    return {item.split(split_string)[0]: int(item.split(split_string)[1])
-            for item in list_to_convert if split_string in item}
+from functions import list_to_dict
 
 
 def create_report_object(url, report_type):
@@ -17,9 +13,12 @@ def make_soup(report):
     r = requests.get(report.url)
     if r.status_code == 200:
         soup = BeautifulSoup(r.text, 'html.parser')
+        html = soup.find_all("html")
         if soup.find_all("div", class_="msg-notBattleReport"):
             return False
         else:
+            if html[0].has_attr('lang'):
+                report.set_language(html[0]['lang'])
             return soup
     else:
         return False

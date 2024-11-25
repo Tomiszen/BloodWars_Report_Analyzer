@@ -40,15 +40,15 @@ def display_player(player):
         right_col.write(player.time_bonuses)
 
 
-def display_top_players(player):
+def display_top_players(player, language):
     with st.form("top_players"):
         form_col1, form_col2 = st.columns(2)
-        parameter = form_col1.selectbox("Parameter",
+        parameter = form_col1.selectbox("Parametr",
                                         ['initiative', 'strength', 'agility', 'toughness', 'appearance',
                                          'charisma', 'reputation', 'perception', 'intelligence',
                                          'knowledge', 'hp', 'defence', 'luck'])
         limit = form_col2.number_input(label="Ilu graczy", min_value=0, step=1, value=5)
         ascending = st.checkbox("Najlepsi", value=True)
-        submitted = st.form_submit_button("Submit")
+        submitted = st.form_submit_button("Wyświetl")
         if submitted:
-            st.table(player.get_top_players(parameter, ascending=ascending, limit=limit))
+            st.table(player.get_top_players(parameter, ascending=ascending, limit=limit, language=language))
