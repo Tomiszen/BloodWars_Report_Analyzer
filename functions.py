@@ -27,10 +27,43 @@ def translate_parameter(parameter, language):
                          'perception': 'perception',
                          'intelligence': 'intelligence',
                          'knowledge': 'knowledge',
-                         'initiative': 'inicjatywa',
-                         'hp': 'punkty życia',
-                         'defence': 'obrona',
-                         'luck': 'szczęście'
+                         'initiative': 'initiative',
+                         'hp': 'hp',
+                         'defence': 'defence',
+                         'luck': 'luck'
+                         }
+                  }
+    return vocabulary[language][parameter]
+
+
+def translate_parameter_default(parameter, language):
+    vocabulary = {'pl': {'siła': 'strength',
+                         'zwinność': 'agility',
+                         'odporność': 'toughness',
+                         'wygląd': 'appearance',
+                         'charyzma': 'charisma',
+                         'wpływy': 'reputation',
+                         'spostrzegawczość': 'perception',
+                         'inteligencja': 'intelligence',
+                         'wiedza': 'knowledge',
+                         'inicjatywa': 'initiative',
+                         'punkty życia': 'hp',
+                         'obrona': 'defence',
+                         'szczęście': 'luck'
+                         },
+                  'en': {'strength': 'strength',
+                         'agility': 'agility',
+                         'toughness': 'toughness',
+                         'appearance': 'appearance',
+                         'charisma': 'charisma',
+                         'reputation': 'reputation',
+                         'perception': 'perception',
+                         'intelligence': 'intelligence',
+                         'knowledge': 'knowledge',
+                         'initiative': 'initiative',
+                         'hp': 'hp',
+                         'defence': 'defence',
+                         'luck': 'luck'
                          }
                   }
     return vocabulary[language][parameter]

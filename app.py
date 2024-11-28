@@ -15,9 +15,10 @@ st.html(''' <style> hr { border-color: orange; } </style> ''')
 st.title("Analizator aren klanowych BloodWars")
 st.subheader("Made by Tomisz")
 
-link = st.text_input(label=":link: link do raportu", value="https://r1.bloodwars.pl/showmsg.php?mid=202096794&key=8c479fca18")
-btn = st.button("Analizuj", type="primary")
-st.markdown(st.session_state)
+report_expander = st.expander("Raport", expanded=True if 'player' not in st.session_state else False)
+link = report_expander .text_input(label=":link: link do raportu", value="https://r1.bloodwars.pl/showmsg.php?mid=202096794&key=8c479fca18")
+btn = report_expander .button("Analizuj", type="primary")
+st.divider()
 if btn and 'player' not in st.session_state:
     report = service.create_report_object(link, 'Arena klanowa')
     soup = service.make_soup(report)
