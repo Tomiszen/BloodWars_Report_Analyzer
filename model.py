@@ -1,3 +1,6 @@
+from functions import translate_parameter
+
+
 class Report:
 
     def __init__(self, url, report_type):
@@ -6,9 +9,13 @@ class Report:
         self.attacker = None
         self.defender = None
         self.winner = None
+        self.language = 'en'
 
     def __str__(self):
         return self.report_type + ": " + self.attacker + " vs " + self.defender
+
+    def set_language(self, language):
+        self.language = language
 
     def set_opponents(self, sides):
         self.attacker = sides['attacker'].strip()
@@ -70,6 +77,13 @@ class Player:
         players_names_list = [player.name for player in cls.players_list]
         players_names_list.sort()
         return players_names_list
+
+    @classmethod
+    def get_top_players(cls, parameter, ascending=True, limit=5, language='en'):
+        top_list = sorted(cls.players_list, key=lambda x: x.parameters[parameter], reverse=ascending)[:limit]
+        return [{'Klan': x.clan, 'Gracz': x.name,
+                 translate_parameter(parameter, language).capitalize(): x.parameters[parameter]}
+                for x in top_list]
 
     def set_race(self, race):
         self.race = race

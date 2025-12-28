@@ -1,4 +1,5 @@
 import streamlit as st
+from functions import translate_parameter_default
 
 
 def check_icon(result):
@@ -38,3 +39,21 @@ def display_player(player):
         left_col.write(player.tactic)
         right_col.write(":grey[Bonusy czasowe:]")
         right_col.write(player.time_bonuses)
+
+
+def display_top_players(player, language):
+    with st.form("top_players"):
+        form_col1, form_col2, form_col3 = st.columns([3,3,1])
+        parameter = form_col1.selectbox("Parametr",
+                                        ['siła', 'zwinność', 'odporność', 'wygląd', 'charyzma',
+                                         'wpływy', 'spostrzegawczość', 'inteligencja', 'wiedza',
+                                         'inicjatywa', 'punkty życia', 'obrona', 'szczęście'])
+
+        limit = form_col2.number_input(label="Ilu graczy", min_value=0, step=1, value=5)
+        ascending = form_col3.radio("Sortowanie", ['Najlepsi', 'Najsłabsi'])
+        submitted = st.form_submit_button("Wyświetl")
+        if submitted:
+            st.table(player.get_top_players(parameter=translate_parameter_default(parameter, language),
+                                            ascending=True if ascending == 'Najlepsi' else False,
+                                            limit=limit,
+                                            language=language))
