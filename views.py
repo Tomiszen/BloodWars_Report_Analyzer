@@ -39,6 +39,10 @@ def display_player(player):
         left_col.write(player.tactic)
         right_col.write(":grey[Bonusy czasowe:]")
         right_col.write(player.time_bonuses)
+        left_col.write(":grey[Akcje:]")
+        left_col.write(player.actions_counters)
+        right_col.write(":grey[Komentarze:]")
+        right_col.write(player.get_comments())
 
 
 def display_top_players(player, language):

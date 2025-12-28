@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 from functions import list_to_dict
+from model import Player
 
 
 def create_report_object(url, report_type):
@@ -162,3 +163,59 @@ def read_time_bonuses(soup):
 
 def time_bonuses_div(tag):
     return tag.name == 'div' and 'czasowe' in tag.get_text()
+
+
+def read_battle(soup):
+    for battle_round in soup.find_all('ul', {'class': 'round'}):
+        count_attacks(battle_round)
+        count_heals(battle_round)
+
+def count_attacks(battle_round):
+    for message in battle_round.find_all('li', {'class': ['atkHit', 'defHit']}):
+        attacker_id, defender_id = read_players_in_action(message)
+        attacker = Player.get_player(player_id=attacker_id)
+        defender = Player.get_player(player_id=defender_id)
+        text = message.text
+        if "atakuje" in text and "zranion" in text:
+            attacker.update_hits()
+            defender.update_defences()
+        elif "atakuje" in text and "wykonuje" in text:
+            attacker.update_misses()
+            defender.update_dodges()
+        elif "atakuje" in text and "nie zostaje" in text:
+            attacker.update_misses()
+            defender.update_successful_defences()
+        elif "cios krytyczny" in text:
+            attacker.update_crits()
+            defender.update_crit_defs()
+
+
+def count_heals(battle_round):
+    for message in battle_round.find_all('li', {'class': 'heal'}):
+        healer_id = read_players_in_action(message)
+        healer = Player.get_player(player_id=healer_id)
+        text = message.text
+        if "odzyskuje" in text:
+            hp = int(re.findall(" [0-9]+ ", str(text))[0])
+            healer.update_heals(hp)
+
+
+def read_players_in_action(message):
+    players = re.findall("[a-z]{2}_[0-9]+", str(message))
+    if len(players) == 2:
+        return players[0], players[1]
+    else:
+        return players[0]
+
+
+def add_comment(self, comment):
+    self.comments.append(comment)
+
+
+
+
+def check_player(player):
+    player.check_ninja()
+    player.check_arcanas()
+    player.check_talismans()
+    return None

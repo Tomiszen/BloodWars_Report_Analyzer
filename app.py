@@ -33,6 +33,9 @@ if btn and 'player' not in st.session_state:
             st.session_state['player'] = Player
         if 'report' not in st.session_state:
             st.session_state['report'] = report
+        service.read_battle(soup)
+        for player in Player.players_list:
+            service.check_player(player)
     else:
         st.error("Błędny link do raportu")
 
