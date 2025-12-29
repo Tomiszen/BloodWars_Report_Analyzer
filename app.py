@@ -15,6 +15,9 @@ def clear_cache():
     st.cache_resource.clear()
     st.session_state.clear()
 
+if 'player' not in st.session_state:
+    st.session_state['link'] = ""
+
 st.set_page_config(layout="wide")
 st.html(''' <style> hr { border-color: orange; } </style> ''')
 
@@ -25,9 +28,11 @@ report_expander = st.expander("Raport", expanded=True if 'player' not in st.sess
 link = report_expander.text_input(label=":link: link do raportu", value="https://r1.bloodwars.pl/showmsg.php?mid=202096794&key=8c479fca18")
 btn = report_expander.button("Analizuj", type="primary")
 st.divider()
-if btn and 'player' not in st.session_state:
+
+if btn and link != st.session_state['link']:
     clear_cache()
     Player.players_list = []
+    st.session_state['link'] = link
     report = service.create_report_object(link, 'Arena klanowa')
     soup = service.make_soup(report)
     if soup:
@@ -52,7 +57,7 @@ if btn and 'player' not in st.session_state:
     selected_player = st.selectbox("Gracz", Player.get_players_names())
     views.display_top_players(Player, report.language)
 
-elif 'player' in st.session_state:
+elif link == st.session_state['link']:
     Player = st.session_state['player']
     report = st.session_state['report']
     views.display_clans(Player, report)
@@ -61,7 +66,5 @@ elif 'player' in st.session_state:
     views.display_player(Player.get_player(name=selected_name))
     views.display_top_players(Player, report.language)
 
-
-st.sidebar.button("Refresh Program",on_click=clear_cache)
 
 
