@@ -180,17 +180,16 @@ def count_attacks(battle_round):
         if "kontratakuje" in text or "kontratak" in text:
             if "cios krytyczny" in text:
                 attacker.update_cntr_crits()
-                #defender.update_crit_defs()
+                defender.update_cntr_crit_defs()
             elif "zranion" in text:
                 attacker.update_cntr_hits()
-                #defender.update_defences()
+                defender.update_cntr_defences()
             elif "wykonuje" in text:
                 attacker.update_cntr_misses()
-                #defender.update_dodges()
+                defender.update_cntr_dodges()
             elif "nie zostaje" in text:
                 attacker.update_cntr_misses()
-                #defender.update_successful_defences()
-
+                defender.update_cntr_successful_defences()
 
         elif "atakuje" in text:
             if "zranion" in text:

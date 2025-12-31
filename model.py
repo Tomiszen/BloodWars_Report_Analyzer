@@ -149,6 +149,10 @@ class Player:
         self.update_defences()
         self.actions_counters["dodges"] = self.actions_counters.get("dodges") + 1
 
+    def update_crit_defs(self):
+        self.update_defences()
+        self.actions_counters["crit_taken"] = self.actions_counters.get("crit_taken") + 1
+
     def update_cntrs(self):
         self.actions_counters["cntrattacks"] = self.actions_counters.get("cntrattacks") + 1
 
@@ -167,9 +171,23 @@ class Player:
         self.update_cntr_hits()
         self.actions_counters["cntr_crits"] = self.actions_counters.get("cntr_crits") + 1
 
-    def update_crit_defs(self):
-        self.update_defences()
-        self.actions_counters["crit_taken"] = self.actions_counters.get("crit_taken") + 1
+    def update_cntr_defences(self):
+        self.actions_counters["cntr_defences"] = self.actions_counters.get("cntr_defences") + 1
+
+    def update_cntr_successful_defences(self):
+        self.update_cntr_defences()
+        self.update_successful_defences()
+        self.actions_counters["scs_cntr_def"] = self.actions_counters.get("scs_cntr_def") + 1
+
+    def update_cntr_dodges(self):
+        self.update_cntr_defences()
+        self.update_dodges()
+        self.actions_counters["cntr_dodges"] = self.actions_counters.get("cntr_dodges") + 1
+
+    def update_cntr_crit_defs(self):
+        self.update_cntr_defences()
+        self.update_crit_defs()
+        self.actions_counters["cntr_crit_taken"] = self.actions_counters.get("cntr_crit_taken") + 1
 
     def update_heals(self, hp):
         self.actions_counters["heals"] = self.actions_counters.get("heals") + 1
