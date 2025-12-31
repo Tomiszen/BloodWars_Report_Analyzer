@@ -176,19 +176,35 @@ def count_attacks(battle_round):
         attacker = Player.get_player(player_id=attacker_id)
         defender = Player.get_player(player_id=defender_id)
         text = message.text
-        if "atakuje" in text and "zranion" in text:
-            attacker.update_hits()
-            defender.update_defences()
-        elif "atakuje" in text and "wykonuje" in text:
-            attacker.update_misses()
-            defender.update_dodges()
-        elif "atakuje" in text and "nie zostaje" in text:
-            attacker.update_misses()
-            defender.update_successful_defences()
-        elif "cios krytyczny" in text:
-            attacker.update_crits()
-            defender.update_crit_defs()
 
+        if "kontratakuje" in text or "kontratak" in text:
+            if "cios krytyczny" in text:
+                attacker.update_cntr_crits()
+                #defender.update_crit_defs()
+            elif "zranion" in text:
+                attacker.update_cntr_hits()
+                #defender.update_defences()
+            elif "wykonuje" in text:
+                attacker.update_cntr_misses()
+                #defender.update_dodges()
+            elif "nie zostaje" in text:
+                attacker.update_cntr_misses()
+                #defender.update_successful_defences()
+
+
+        elif "atakuje" in text:
+            if "zranion" in text:
+                attacker.update_hits()
+                defender.update_defences()
+            elif "wykonuje" in text:
+                attacker.update_misses()
+                defender.update_dodges()
+            elif "nie zostaje" in text:
+                attacker.update_misses()
+                defender.update_successful_defences()
+        elif "cios krytyczny" in text:
+                attacker.update_crits()
+                defender.update_crit_defs()
 
 def count_heals(battle_round):
     for message in battle_round.find_all('li', {'class': 'heal'}):

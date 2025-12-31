@@ -52,7 +52,9 @@ class Player:
         self.tactic = None
         self.time_bonuses = {}
         self.actions_counters = {"attacks": 0, "hits": 0, "misses": 0, "crits": 0,
+                                 "cntrattacks": 0, "cntr_hits": 0, "cntr_misses": 0, "cntr_crits": 0,
                                  "defences": 0, "successful_defs": 0, "dodges": 0, "crit_taken": 0,
+                                 "cntr_defences": 0, "scs_cntr_def": 0, "cntr_dodges": 0, "cntr_crit_taken": 0,
                                  "heals": 0, "hp_recovered": 0}
         self.comments = []
         type(self).players_list.append(self)
@@ -146,6 +148,24 @@ class Player:
     def update_dodges(self):
         self.update_defences()
         self.actions_counters["dodges"] = self.actions_counters.get("dodges") + 1
+
+    def update_cntrs(self):
+        self.actions_counters["cntrattacks"] = self.actions_counters.get("cntrattacks") + 1
+
+    def update_cntr_hits(self):
+        self.update_hits()
+        self.update_cntrs()
+        self.actions_counters["cntr_hits"] = self.actions_counters.get("cntr_hits") + 1
+
+    def update_cntr_misses(self):
+        self.update_misses()
+        self.update_cntrs()
+        self.actions_counters["cntr_misses"] = self.actions_counters.get("cntr_misses") + 1
+
+    def update_cntr_crits(self):
+        self.update_hits()
+        self.update_cntr_hits()
+        self.actions_counters["cntr_crits"] = self.actions_counters.get("cntr_crits") + 1
 
     def update_crit_defs(self):
         self.update_defences()
